@@ -87,7 +87,6 @@ module ActiveHash
 
     module Methods
       def has_many(association_id, options = {})
-
         define_method(association_id) do
           options = {
             :class_name => association_id.to_s.classify,
@@ -103,7 +102,8 @@ module ActiveHash
           elsif klass.respond_to?(:scoped)
             klass.scoped(:conditions => {options[:foreign_key] => primary_key_value})
           else
-            klass.send("find_all_by_#{options[:foreign_key]}", primary_key_value)
+            # klass.send("find_all_by_#{options[:foreign_key]}", primary_key_value)
+            klass.send(:where, options[:foreign_key].to_s => primary_key_value)
           end
         end
       end
